@@ -18,16 +18,16 @@
   </div>
   
   <form id="payment-form" method="post" action="index.php?route=extension/payment/snap/landing_redir">
-    <input type="hidden" name="result_type" id="result-type" value=""></div>
-    <input type="hidden" name="result_data" id="result-data" value=""></div>
-    <input type="hidden" name="result_origin" id="result-origin" value=""></div>
+    <input type="hidden" name="result_type" id="result-type" value="">
+    <input type="hidden" name="result_data" id="result-data" value="">
+    <input type="hidden" name="result_origin" id="result-origin" value="">
   <div class="buttons">
 
     <div class="pull-right"> 
     <input type="submit" value="{{ button_confirm }}" id="button-confirm" class="btn btn-primary " data-loading-text="{{ text_loading }}"  />
-    </form>
     </div>
   </div>
+    </form>
 
   {% if disable_mixpanel == 0 %}
     <!-- start Mixpanel -->

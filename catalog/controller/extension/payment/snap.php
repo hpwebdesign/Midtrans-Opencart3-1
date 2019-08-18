@@ -274,7 +274,7 @@ class ControllerExtensionPaymentSnap extends Controller {
     $this->load->model('checkout/order');
     $redirUrl = $this->config->get('config_ssl');
     //$this->cart->clear();
-    if ($_POST['result_type'] == 'success') {
+    if (isset($_POST['result_type']) && $_POST['result_type'] == 'success') {
         $this->cart->clear();
         $redirUrl = $this->url->link('checkout/success&');
         $this->response->redirect($redirUrl);
@@ -423,11 +423,16 @@ class ControllerExtensionPaymentSnap extends Controller {
           $data['content_bottom'] = $this->load->controller('common/content_bottom');
           $data['footer'] = $this->load->controller('common/footer');
           $data['header'] = $this->load->controller('common/header');
-      
+			
+		  // hpwd
+		  unset($this->session->data['order_id']);
+
           $this->response->setOutput($this->load->view('extension/payment/snap_exec',$data));
         }
 
         else{
+			// hpwd
+		  unset($this->session->data['order_id']);
           $redirUrl = $this->url->link('extension/payment/snap/failure');
           $this->response->redirect($redirUrl); 
         }
@@ -453,7 +458,7 @@ class ControllerExtensionPaymentSnap extends Controller {
     $data['footer'] = $this->load->controller('common/footer');
     $data['header'] = $this->load->controller('common/header');
     $data['checkout_url'] = $this->url->link('checkout/cart');
-
+	  
     $this->response->setOutput($this->load->view('extension/payment/snap_checkout_failure',$data));
   }
 
@@ -513,13 +518,13 @@ class ControllerExtensionPaymentSnap extends Controller {
       else if ($fraud == 'accept') {
         $logs .= 'accept ';
         $this->model_checkout_order->addOrderHistory(
-            $notif->order_id,$this->config->get('payment_snap_status_success'),$order_note . 'Payment Completed - ' . $payment_type);
+            $notif->order_id,2,$order_note . 'Payment Completed - ' . $payment_type);
       }
     }
     else if ($transaction == 'cancel') {
         $logs .= 'cancel ';
         $this->model_checkout_order->addOrderHistory(
-            $notif->order_id,$this->config->get('payment_snap_status_failure'),$order_note . 'Canceled Payment - ' . $payment_type);
+            $notif->order_id,7,$order_note . 'Canceled Payment - ' . $payment_type);
     }
     else if ($transaction == 'pending') {
       $logs .= 'pending ';
@@ -535,7 +540,7 @@ class ControllerExtensionPaymentSnap extends Controller {
           if($payment_type != 'credit_card'){
               $logs .= 'complete ';
               $this->model_checkout_order->addOrderHistory(
-              $notif->order_id,$this->config->get('payment_snap_status_success'),$order_note . 'Payment Completed - ' . $payment_type);
+              $notif->order_id,2,$order_note . 'Payment Completed - ' . $payment_type);
           }
     }
     //error_log($logs); //debugan to be commented
@@ -546,7 +551,7 @@ class ControllerExtensionPaymentSnap extends Controller {
     $this->load->model('checkout/order');
     // error_log($this->session->data['order_id']);
     $current_order_id = $this->session->data['order_id'];
-    $this->model_checkout_order->addOrderHistory($current_order_id,$this->config->get('payment_snap_status_failure'),'Cancel from snap close.');
+    $this->model_checkout_order->addOrderHistory($current_order_id,7,'Cancel from snap close.');
     // error_log('cancel order'. $this->session->data['order_id']. 'success');
     echo 'ok';
   }
