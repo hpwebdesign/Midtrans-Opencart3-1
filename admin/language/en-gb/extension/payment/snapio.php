@@ -30,26 +30,27 @@ $_['entry_installment_term'] = 'Installment Terms';
 $_['entry_bin_number']  = 'Bin Number';
 $_['entry_mixpanel']	 = 'Midtrans Mixpanel';
 $_['entry_success_mapping'] = 'Success Order Status';
-$_['entry_challenge_mapping'] = 'Pending Order Status';
+$_['entry_pending_mapping'] = 'Pending Order Status';
 $_['entry_failure_mapping'] = 'Failure Order Status';
-$_['entry_failure_mapping'] = 'Map Payment Failure Status to Order Status:';
 $_['entry_status_failed'] = 'Failure Order Status';
 $_['entry_status_success'] = 'Success Order Status';
 $_['entry_display_name'] = 'Display name:';
+$_['entry_redirect'] = 'Redirect Payment Page';
 
 // Help
-$_['help_challenge_mapping'] = 'Change to the following order status once the payment pending';
+$_['help_pending_mapping'] = 'Change to the following order status once the payment pending';
 $_['help_failure_mapping'] = 'Change to the following order status once the payment failure';
 $_['help_success_mapping'] = 'Change to the following order status once the payment success';
 $_['help_min'] = 'Minimum amount of transaction.';
 $_['help_custom_field'] = 'This will allow you to set custom fields that will be displayed on Midtrans dashboard.';
+$_['help_redirect'] = 'This will redirect customer to Midtrans hosted payment page instead of popup payment page on your website.';
 
 // Error
 $_['error_permission']   = 'Warning: You do not have permission to modify Snap Offline Installment!';
 $_['error_merchant_id']	 = 'Merchant Id is required!';
 $_['error_client_key']   = 'Client Key is required!';
 $_['error_server_key']   = 'Server Key is required!';
-$_['error_currency_conversion'] = 'Currency conversion rate is required when IDR currency is not installed in the system!';
+$_['error_currency_conversion'] = 'Currency conversion rate is required';
 $_['error_display_name'] = 'Please specify a name for this payment method!';
 $_['error_min_txn']      = 'Please specify a minimum amount for installment!';
 ?>
