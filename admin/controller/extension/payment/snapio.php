@@ -57,8 +57,8 @@ class ControllerExtensionPaymentSnapio extends Controller {
       $data['error_min_txn'] = '';
     }
 
-    if (isset($this->error['snapio_currency_conversion'])) {
-      $data['error_currency_conversion'] = $this->error['snapio_currency_conversion'];
+    if (isset($this->error['currency_conversion'])) {
+      $data['error_currency_conversion'] = $this->error['currency_conversion'];
     } else {
       $data['error_currency_conversion'] = '';
     }
@@ -94,7 +94,6 @@ class ControllerExtensionPaymentSnapio extends Controller {
       'payment_snapio_client_key',
       'payment_snapio_geo_zone_id',
       'payment_snapio_sort_order',
-      'payment_snapio_currency_conversion',
       'payment_snapio_min_txn',
       'payment_snapio_acq_bank',
       'payment_snapio_installment_term',
@@ -103,8 +102,7 @@ class ControllerExtensionPaymentSnapio extends Controller {
       'payment_snapio_custom_field2',
       'payment_snapio_custom_field3',
       'payment_snapio_mixpanel',
-      'payment_snapio_status_failure',
-      'payment_snapio_status_success'
+      'payment_snapio_redirect'
     );
 
     foreach ($inputs as $input) {
@@ -113,6 +111,38 @@ class ControllerExtensionPaymentSnapio extends Controller {
       } else {
         $data[$input] = $this->config->get($input);
       }
+    }
+
+    if (isset($this->request->post['payment_snapio_status_success'])) {
+      $data['payment_snapio_status_success'] = $this->request->post['payment_snapio_status_success'];
+    } elseif ($this->config->get('payment_snapio_status_success')) {
+      $data['payment_snapio_status_success'] = $this->config->get('payment_snapio_status_success');
+    } else {
+      $data['payment_snapio_status_success'] = '2';
+    }
+
+    if (isset($this->request->post['payment_snapio_status_pending'])) {
+      $data['payment_snapio_status_pending'] = $this->request->post['payment_snapio_status_pending'];
+    } elseif ($this->config->get('payment_snapio_status_pending')) {
+      $data['payment_snapio_status_pending'] = $this->config->get('payment_snapio_status_pending');
+    } else {
+      $data['payment_snapio_status_pending'] = '1';
+    }
+
+    if (isset($this->request->post['payment_snapio_status_failure'])) {
+      $data['payment_snapio_status_failure'] = $this->request->post['payment_snapio_status_failure'];
+    } elseif ($this->config->get('payment_snapio_status_failure')) {
+      $data['payment_snapio_status_failure'] = $this->config->get('payment_snapio_status_failure');
+    } else {
+      $data['payment_snapio_status_failure'] = '7';
+    }
+
+    if (isset($this->request->post['payment_snapio_currency_conversion'])) {
+      $data['payment_snapio_currency_conversion'] = $this->request->post['payment_snapio_currency_conversion'];
+    } elseif ($this->config->get('payment_snapio_currency_conversion')) {
+      $data['payment_snapio_currency_conversion'] = $this->config->get('payment_snapio_currency_conversion');
+    } else {
+      $data['payment_snapio_currency_conversion'] = 1;
     }
 
     $this->load->model('localisation/order_status');
@@ -174,7 +204,7 @@ class ControllerExtensionPaymentSnapio extends Controller {
       $this->error['min_txn'] = $this->language->get('error_min_txn');
     }
     // currency conversion to IDR
-    if (!$this->request->post['payment_snapio_currency_conversion'] && !$this->currency->has('IDR'))
+    if (!$this->request->post['payment_snapio_currency_conversion'])
       $this->error['currency_conversion'] = $this->language->get('error_currency_conversion');
 
     return !$this->error;

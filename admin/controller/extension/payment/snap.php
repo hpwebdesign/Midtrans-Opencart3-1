@@ -51,8 +51,8 @@ class ControllerExtensionPaymentSnap extends Controller {
       $data['error_client_key'] = '';
     }
 
-    if (isset($this->error['snap_currency_conversion'])) {
-      $data['error_currency_conversion'] = $this->error['snap_currency_conversion'];
+    if (isset($this->error['currency_conversion'])) {
+      $data['error_currency_conversion'] = $this->error['currency_conversion'];
     } else {
       $data['error_currency_conversion'] = '';
     }
@@ -89,7 +89,6 @@ class ControllerExtensionPaymentSnap extends Controller {
       'payment_snap_geo_zone_id',
       'payment_snap_sort_order',
       'payment_snap_3d_secure',
-      'payment_snap_currency_conversion',
       'payment_snap_status',
       'payment_snap_expiry_duration',
       'payment_snap_expiry_unit',
@@ -97,8 +96,7 @@ class ControllerExtensionPaymentSnap extends Controller {
       'payment_snap_custom_field2',
       'payment_snap_custom_field3',
       'payment_snap_mixpanel',
-      'payment_snap_status_failure',
-      'payment_snap_status_success'
+      'payment_snap_redirect'
     );
 
     foreach ($inputs as $input) {
@@ -107,6 +105,38 @@ class ControllerExtensionPaymentSnap extends Controller {
       } else {
         $data[$input] = $this->config->get($input);
       }
+    }
+
+    if (isset($this->request->post['payment_snap_status_success'])) {
+      $data['payment_snap_status_success'] = $this->request->post['payment_snap_status_success'];
+    } elseif ($this->config->get('payment_snap_status_success')) {
+      $data['payment_snap_status_success'] = $this->config->get('payment_snap_status_success');
+    } else {
+      $data['payment_snap_status_success'] = '2';
+    }
+
+    if (isset($this->request->post['payment_snap_status_pending'])) {
+      $data['payment_snap_status_pending'] = $this->request->post['payment_snap_status_pending'];
+    } elseif ($this->config->get('payment_snap_status_pending')) {
+      $data['payment_snap_status_pending'] = $this->config->get('payment_snap_status_pending');
+    } else {
+      $data['payment_snap_status_pending'] = '1';
+    }
+
+    if (isset($this->request->post['payment_snap_status_failure'])) {
+      $data['payment_snap_status_failure'] = $this->request->post['payment_snap_status_failure'];
+    } elseif ($this->config->get('payment_snap_status_failure')) {
+      $data['payment_snap_status_failure'] = $this->config->get('payment_snap_status_failure');
+    } else {
+      $data['payment_snap_status_failure'] = '7';
+    }
+
+    if (isset($this->request->post['payment_snap_currency_conversion'])) {
+      $data['payment_snap_currency_conversion'] = $this->request->post['payment_snap_currency_conversion'];
+    } elseif ($this->config->get('payment_snap_currency_conversion')) {
+      $data['payment_snap_currency_conversion'] = $this->config->get('payment_snap_currency_conversion');
+    } else {
+      $data['payment_snap_currency_conversion'] = 1;
     }
 
     $this->load->model('localisation/order_status');
@@ -172,7 +202,7 @@ class ControllerExtensionPaymentSnap extends Controller {
     }
     
     // currency conversion to IDR
-    if (!$this->request->post['payment_snap_currency_conversion'] && !$this->currency->has('IDR'))
+    if (!$this->request->post['payment_snap_currency_conversion'])
       $this->error['currency_conversion'] = $this->language->get('error_currency_conversion');
 
     return !$this->error;
